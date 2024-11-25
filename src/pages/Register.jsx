@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 const Register = () => {
     const Nvgt = useNavigate();
     const [loading, setLoading] = useState(false);
-    const url = import.meta.env.VITE_API_URL
 
     const formik = useFormik({
         initialValues: {
@@ -32,7 +31,7 @@ const Register = () => {
                 role: values.role
             };
             try {
-                await axios.post(`${url}/user/register`, trimmedValues);
+                await axios.post(`https://rbac-restapi.onrender.com/user/register`, trimmedValues);
                 toast.success('Registered Successfully')
                 Nvgt('/');
             } catch (error) {

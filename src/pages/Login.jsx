@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
+    const Nvgt = useNavigate()
     const [loading, setLoading] = useState(false);
+    const url = import.meta.env.VITE_API_URL
 
     const formik = useFormik({
         initialValues: {
@@ -19,11 +22,26 @@ const Login = () => {
         onSubmit: async (values) => {
             setLoading(true);
             try {
-                const response = await axios.post("http://localhost:3001/api/user/login", values);
-                console.log("Login successful:", response.data);
+                const response = await axios.post(`${url}/user/login`, values);
+                const Data = response.data;
+                if (Data.role === 'Admin') {
+                    localStorage.setItem('adminToken', Data.token);
+                    toast.success('Admin Login Successfully')
+                    Nvgt('/admin');
+                } else if (Data.role === 'User') {
+                    localStorage.setItem('userToken', Data.token);
+                    toast.success('User Login Successfully')
+                    Nvgt('/user');
+                } else if (Data.role === 'Moderator') {
+                    localStorage.setItem('moderatorToken', Data.token);
+                    toast.success('Moderator Login Successfully')
+                    Nvgt('/moderator');
+                } else {
+                    throw new Error('Unknown role');
+                }
             } catch (error) {
                 console.error("Login failed:", error.response ? error.response.data : error.message);
-                alert("Login failed. Please check your credentials.");
+                toast.warning("Login failed. Please check your credentials!.");
             } finally {
                 setLoading(false);
             }
@@ -49,8 +67,8 @@ const Login = () => {
                             {...formik.getFieldProps("email")}
                             placeholder="Enter your email"
                             className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${formik.touched.email && formik.errors.email
-                                    ? "border-yellow-500 focus:ring-yellow-500"
-                                    : "border-gray-300 focus:ring-gray-400"
+                                ? "border-yellow-500 focus:ring-yellow-500"
+                                : "border-gray-300 focus:ring-gray-400"
                                 }`}
                         />
                         {formik.touched.email && formik.errors.email && (
@@ -73,8 +91,8 @@ const Login = () => {
                             {...formik.getFieldProps("password")}
                             placeholder="Enter your password"
                             className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${formik.touched.password && formik.errors.password
-                                    ? "border-yellow-500 focus:ring-yellow-500"
-                                    : "border-gray-300 focus:ring-gray-400"
+                                ? "border-yellow-500 focus:ring-yellow-500"
+                                : "border-gray-300 focus:ring-gray-400"
                                 }`}
                         />
                         {formik.touched.password && formik.errors.password && (

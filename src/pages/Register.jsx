@@ -3,10 +3,12 @@ import * as Yup from 'yup';
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 const Register = () => {
     const Nvgt = useNavigate();
     const [loading, setLoading] = useState(false);
+    const url = import.meta.env.VITE_API_URL
 
     const formik = useFormik({
         initialValues: {
@@ -30,11 +32,12 @@ const Register = () => {
                 role: values.role
             };
             try {
-                await axios.post('http://localhost:3001/api/user/register', trimmedValues);
+                await axios.post(`${url}/user/register`, trimmedValues);
+                toast.success('Registered Successfully')
                 Nvgt('/');
             } catch (error) {
                 console.error('Signup error:', error.response ? error.response.data : error.message);
-                alert('Signup failed. Please check your credentials.');
+                toast.warning('Signup failed. Please check your credentials!.');
             } finally {
                 setLoading(false);
             }

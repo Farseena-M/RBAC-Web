@@ -1,4 +1,6 @@
 import { Route, Routes } from "react-router-dom"
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Admin from "./pages/Admin"
@@ -17,6 +19,7 @@ function App() {
         <Route path="/user" element={<User />} />
         <Route path="/moderator" element={<Moderator />} />
       </Routes>
+      <ToastContainer position="top-center" autoClose='500' />
     </>
   )
 }

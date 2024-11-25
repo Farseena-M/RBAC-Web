@@ -1,7 +1,17 @@
 import React from 'react'
 import { FaSignOutAlt } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Admin = () => {
+    const Nvgt = useNavigate()
+
+    const handleLogout = () => {
+        localStorage.removeItem('adminToken')
+        toast.success('Admin logout Successfully')
+        Nvgt('/')
+    }
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-200">
             <div className="bg-white p-10 rounded-lg shadow-xl w-full max-w-3xl">
@@ -12,7 +22,7 @@ const Admin = () => {
                     Manage all aspects of the system efficiently and effectively.
                 </p>
                 <div className="mt-8 flex justify-center" title='Logout'>
-                    <button className="bg-gray-800 text-white p-3 rounded-full hover:bg-gray-700 transition duration-300">
+                    <button className="bg-gray-800 text-white p-3 rounded-full hover:bg-gray-700 transition duration-300" onClick={handleLogout}>
                         <FaSignOutAlt className="text-2xl" />
                     </button>
                 </div>

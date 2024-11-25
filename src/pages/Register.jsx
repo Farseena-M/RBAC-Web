@@ -31,7 +31,7 @@ const Register = () => {
                 role: values.role
             };
             try {
-                await axios.post(`https://rbac-restapi.onrender.com/user/register`, trimmedValues);
+                await axios.post(`https://rbac-restapi.onrender.com/api/user/register`, trimmedValues);
                 toast.success('Registered Successfully')
                 Nvgt('/');
             } catch (error) {

@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 const Login = () => {
     const Nvgt = useNavigate()
     const [loading, setLoading] = useState(false);
+    const url = import.meta.env.VITE_API_URL
 
     const formik = useFormik({
         initialValues: {
@@ -21,7 +22,7 @@ const Login = () => {
         onSubmit: async (values) => {
             setLoading(true);
             try {
-                const response = await axios.post(`https://rbac-restapi.onrender.com/api/user/login`, values);
+                const response = await axios.post(`${url}/api/user/login`, values);
                 const Data = response.data;
                 if (Data.role === 'Admin') {
                     localStorage.setItem('adminToken', Data.token);
